@@ -1,0 +1,56 @@
+# Byte-compiled files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual Environment
+env/
+venv/
+funzika_env/
+*.env
+*.venv
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Static files
+/static/
+/media/
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# Python packaging
+dist/
+build/
+*.egg-info/
+
+# Test Coverage files
+coverage.xml
+htmlcov/
+*.cover
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+
+# Flask-specific files
+instance/
+*.db
+
+# Node.js dependencies (if any)
+node_modules/
+
+# Deployment-specific files
+*.bak
+*.tmp
