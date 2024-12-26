@@ -46,22 +46,13 @@ class BaseModel(db.Model):
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
                                          self.__dict__)
 
-    # def save(self):
-        # """Updates attribute 'updated_at' with the current datetime"""
-    #     self.updated_at = datetime.now()
-    #     models.storage.new(self)
-    #     #models.storage.save()
+    def save(self):
+        """Updates the 'updated_at' attribute with the current datetime"""
+        self.updated_at = datetime.now()
+        db.session.commit()
 
-    # def to_dict(self):
-    #     """Returns a dictionary containing all keys/values of the instance"""
-    #     new_dict = self.__dict__.copy()
-    #     if "created_at" in new_dict:
-    #         new_dict["created_at"] = new_dict["created_at"].strftime(time)
-    #     if "updated_at" in new_dict:
-    #         new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
-    #     new_dict["__class__"] = self.__class__.__name__
-    #     return new_dict
-
-    # def delete(self):
-    #     """delete the current instance from the storage"""
-    #     models.storage.delete(self)
+    def to_dict(self):
+        """Returns a dictionary containing all keys/values of the __dict__
+        of the instance"""
+        dictionary = dict(self.__dict__)
+        return dictionary
