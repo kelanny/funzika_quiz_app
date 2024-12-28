@@ -1,0 +1,15 @@
+/* delete_quiz.html */
+{% extends "base.html" %}
+
+{% block title %}Delete Quiz{% endblock %}
+
+{% block content %}
+<h2>Delete Quiz</h2>
+<p>Are you sure you want to delete the quiz titled "<strong>{{ quiz.title }}</strong>"?</p>
+
+<form method="POST">
+    <button type="submit" style="color: white; background-color: red; padding: 10px 20px;">Delete</button>
+</form>
+
+<a href="{{ url_for('quizzes.list_quizzes') }}">Cancel</a>
+{% endblock %}
