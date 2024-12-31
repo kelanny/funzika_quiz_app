@@ -1,14 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Create a New Quiz{% endblock %}
+{% block title %}Create Quiz{% endblock %}
 {% block content %}
 <h2>Create a New Quiz</h2>
 <form method="POST">
-    <label for="title">Title:</label>
-    <input type="text" name="title" id="title" required><br>
-    <label for="description">Description:</label>
-    <textarea name="description" id="description"></textarea><br>
-    <label for="is_active">Is Active:</label>
-    <input type="checkbox" name="is_active" id="is_active"><br>
-    <button type="submit">Create Quiz</button>
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.title.label }}
+        {{ form.title(size=40) }}
+    </div>
+    <div>
+        {{ form.description.label }}
+        {{ form.description(rows=4, cols=50) }}
+    </div>
+    <div>
+        {{ form.is_active.label }}
+        {{ form.is_active() }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
 </form>
 {% endblock %}

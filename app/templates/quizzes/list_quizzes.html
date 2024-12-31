@@ -1,15 +1,20 @@
 {% extends "base.html" %}
-
-{% block title %}Available Quizzes{% endblock %}
-
-{% block content %}
-<h2>Available Quizzes</h2>
+{% block title %}List Quizzes{% endblock %}
+{% blockcontent %}
+<h2>Quizzes</h2>
 <ul>
     {% for quiz in quizzes %}
     <li>
-        <a href="{{ url_for('quizzes.view_quiz', quiz_id=quiz.id) }}">{{ quiz.title }}</a>
-        <p>{{ quiz.description }}</p>
+        {{ quiz.title }}
+        <a href="{{ url_for('quizzes.edit_quiz', quiz_id=quiz.id) }}">Edit</a>
+        {{ quiz.description.as_paragraph() }}
+        <!-- <for
+        m method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}" style="display:inline;">
+            {{ form.hidden_tag() }}
+            <button type="submit">Delete</button>
+        </form> -->
     </li>
     {% endfor %}
 </ul>
+<a href="{{ url_for('quizzes.create_quiz') }}">Create New Quiz</a>
 {% endblock %}

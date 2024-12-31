@@ -54,3 +54,5 @@ node_modules/
 # Deployment-specific files
 *.bak
 *.tmp
+
+.env

@@ -1,18 +1,40 @@
 import os
+from dotenv import load_dotenv
+from os import getenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))    
 
+load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
-    # SECRET_KEY = os.environ.get('SECRET' or 'my-secret-key')
-    SECRET_KEY = 'my_secret_key'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///dev_app.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False # Disable the modification tracker
 
+class DevConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+        getenv('MYSQL_DEV_USER'),
+        getenv('MYSQL_DEV_PASSWORD'),
+        getenv('MYSQL_DEV_HOST'),
+        getenv('MYSQL_DEV_PORT'),
+        getenv('MYSQL_DEV_DB')
+    )
 
-class TestConfig(Config):
+class TestingConfig(Config):
     TESTING = True
-    SECRET_KEY = 'my_secret_key'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+        getenv('MYSQL_TEST_USER'),
+        getenv('MYSQL_TEST_PASSWORD'),
+        getenv('MYSQL_TEST_HOST'),
+        getenv('MYSQL_TEST_PORT'),
+        getenv('MYSQL_TEST_DB')
+    )                      
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False                            
+
+
+class ProdConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+        getenv('MYSQL_PROD_USER'),
+        getenv('MYSQL_PROD_PASSWORD'),
+        getenv('MYSQL_PROD_HOST'),
+        getenv('MYSQL_PROD_PORT'),
+        getenv('MYSQL_PROD_DB')
+    )
