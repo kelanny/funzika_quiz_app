@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Account created: {{ user.created_at }}</p>
+
+<h2>Your Quizzes</h2>
+{% if user.quizzes %}
+    <ul>
+    {% for quiz in user.quizzes %}
+        <li>{{ quiz.title }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You haven't created any quizzes yet.</p>
+{% endif %}
+
+<a href="{{ url_for('users.logout') }}">Logout</a>
+{% endblock %}
