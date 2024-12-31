@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>You have been logged out</h1>
+        <p>Thank you for visiting our site. Come back soon!</p>
+        <a href="{{ url_for('users.login') }}" class="btn btn-primary">Login Again</a>
+        <a href="{{ url_for('landing.index') }}" class="btn btn-secondary">Go to Home</a>
+    </div>
+{% endblock %}
