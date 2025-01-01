@@ -1,15 +1,23 @@
-/* delete_quiz.html */
-{% extends "base.html" %}
+<button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ quiz.id }}">Delete</button>
 
-{% block title %}Delete Quiz{% endblock %}
+<!-- Modal -->
+<div class="modal fade" id="deleteModal-{{ quiz.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the quiz "{{ quiz.title }}"?
+            </div>
+            <div class="modal-footer">
+                <form method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% block content %}
-<h2>Delete Quiz</h2>
-<p>Are you sure you want to delete the quiz titled "<strong>{{ quiz.title }}</strong>"?</p>
-
-<form method="POST">
-    <button type="submit" style="color: white; background-color: red; padding: 10px 20px;">Delete</button>
-</form>
-
-<a href="{{ url_for('quizzes.list_quizzes') }}">Cancel</a>
-{% endblock %}
