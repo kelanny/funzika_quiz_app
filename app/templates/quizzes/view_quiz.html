@@ -1,11 +1,33 @@
 {% extends "base.html" %}
-
-{% block title %}{{ quiz.title }}{% endblock %}
-
+{% block title %}View Quiz{% endblock %}
 {% block content %}
-<h2>{{ quiz.title }}</h2>
-<p>{{ quiz.description }}</p>
-<p>Created At: {{ quiz.created_at }}</p>
-<p>Updated At: {{ quiz.updated_at }}</p>
-<a href="{{ url_for('quizzes.list_quizzes') }}">Back to Quiz List</a>
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h4>{{ quiz.title }}</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Description:</strong> {{ quiz.description }}</p>
+        <p>
+            <strong>Status:</strong>
+            <span class="badge bg-{{ 'success' if quiz.is_active else 'secondary' }}">
+                {{ 'Active' if quiz.is_active else 'Inactive' }}
+            </span>
+        </p>
+        <h5 class="mt-4">Questions</h5>
+        {% if questions %}
+            <ul class="list-group">
+                {% for question in questions %}
+                <li class="list-group-item">
+                    <strong>{{ loop.index }}.</strong> {{ question.text }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No questions have been added to this quiz yet.</p>
+        {% endif %}
+        <div class="mt-4">
+            <a href="{{ url_for('quizzes.list_quizzes') }}" class="btn btn-secondary">Back to Quizzes</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -4,29 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Funzika Quiz App{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <!-- Header and Navigation -->
     <header>
-        <nav class="navbar">
-            <a href="{{ url_for('users.home') }}" class="brand">FlaskApp</a>
-            <ul class="nav-links">
-                {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('users.login') }}">Login</a></li>
-                    <li><a href="{{ url_for('users.register') }}">Register</a></li>
-                {% endif %}
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ url_for('users.home') }}">Funzika</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        {% if current_user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('quizzes.list_quizzes') }}">Quizzes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('users.user_profile') }}">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="{{ url_for('users.logout') }}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
-    <main>
+    
+    <!-- Main Content -->
+    <main class="py-4">
         <div class="container">
             {% block content %}{% endblock %}
         </div>
     </main>
-    <footer>
-        <p>&copy; 2024 Funzika. All rights reserved.</p>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 Funzika. All rights reserved.</p>
+            <small>Challenge yourself. Have fun. Learn more!</small>
+        </div>
     </footer>
+
+    <!-- Bootstrap JS (optional, but required for collapsible navbar) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
