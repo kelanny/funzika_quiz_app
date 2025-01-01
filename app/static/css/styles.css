@@ -51,12 +51,13 @@ header {
 
 .container {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 0 auto;
     padding: 20px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 h2 {
     margin-bottom: 20px;
@@ -80,6 +81,7 @@ h2 {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
+    margin-top: 10px;
     text-decoration: none;
     color: #fff;
     cursor: pointer;
