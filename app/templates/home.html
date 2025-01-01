@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz App{% endblock %}
+
+{% block content %}
+<div class="hero text-center">
+    <h1>Welcome to Funzika Interactive Quiz App!</h1>
+    <p class="lead">Challenge yourself with fun and exciting quizzes! Test your knowledge and climb the leaderboard.</p>
+    <div class="hero-buttons mt-4">
+        
+        <a href="#" class="btn btn-primary btn-lg">Start a Quiz</a>
+        <a href="#" class="btn btn-secondary btn-lg">View Leaderboard</a>
+    </div>
+</div>
+
+<hr class="my-5">
+
+{% if current_user.is_authenticated %}
+<div class="user-info">
+    <h3>Hello, {{ current_user.username }}!</h3>
+    <p>Email: {{ current_user.email }}</p>
+    <p>Ready to test your skills? Click the button above to begin!</p>
+    <a href="{{ url_for('users.logout') }}" class="btn btn-danger mt-2">Logout</a>
+    <a href="{{ url_for('users.delete_account') }}" class="btn btn-outline-secondary mt-2">Delete Account</a>
+</div>
+{% else %}
+<div class="guest-info text-center">
+    <h3>Not Logged In?</h3>
+    <p>Create an account or log in to track your progress and compete on the leaderboard!</p>
+    <a href="{{ url_for('users.register') }}" class="btn btn-success">Register</a>
+    <a href="{{ url_for('users.login') }}" class="btn btn-primary">Login</a>
+</div>
+{% endif %}
+
+<div class="features mt-5">
+    <h2>Why Funzika?</h2>
+    <ul class="list-group">
+        <li class="list-group-item">📚 Learn while having fun!</li>
+        <li class="list-group-item">🎮 Compete with friends and other users.</li>
+        <li class="list-group-item">🏆 Earn badges and climb the leaderboard.</li>
+        <li class="list-group-item">💡 Personalized quizzes for all levels.</li>
+    </ul>
+</div>
+{% endblock %}
+

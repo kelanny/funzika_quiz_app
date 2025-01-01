@@ -3,13 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title if title else 'Funzika Interactive Quiz App' }}</title>
+    <title>{% block title %}Funzika Quiz App{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <header>
+        <nav class="navbar">
+            <a href="{{ url_for('users.home') }}" class="brand">FlaskApp</a>
+            <ul class="nav-links">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('users.login') }}">Login</a></li>
+                    <li><a href="{{ url_for('users.register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Funzika. All rights reserved.</p>
+    </footer>
 </body>
 </html>
-
-
