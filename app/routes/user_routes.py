@@ -56,6 +56,12 @@ def delete_account():
     return redirect(url_for('users.home'))
     return render_template('users/delete_account.html', title='Delete Account')
 
+@users.route('/profile', methods=['GET'])
+@login_required
+def user_profile():
+    """Render the user's profile page."""
+    return render_template('/users/profile.html', user=current_user)
+
 @users.route("/")
 @users.route("/home")
 def home():

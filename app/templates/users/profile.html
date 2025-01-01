@@ -1,22 +1,42 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}User Profile - Funzika{% endblock %}
 
 {% block content %}
-<h1>Welcome, {{ user.username }}</h1>
-<p>Email: {{ user.email }}</p>
-<p>Account created: {{ user.created_at }}</p>
+<div class="card mt-4">
+    <div class="row g-0">
+        <!-- Profile Picture Section -->
+        <div class="col-md-4 text-center">
+            <img src="{{ user.profile_picture or url_for('static', filename='images/default_profile.png') }}" 
+                 alt="Profile Picture" class="img-fluid rounded-circle mt-4" style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        <!-- User Details Section -->
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.username }}</h5>
+                <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                <p class="card-text"><strong>Bio:</strong> {{ user.bio or "No bio available" }}</p>
+                <p class="card-text"><small class="text-muted">Member since {{ user.created_at.strftime('%B %d, %Y') }}</small></p>
+                <a href="{{ url_for('users.user_profile') }}" class="btn btn-primary btn-sm">Edit Profile</a>
+                <a href="#" class="btn btn-secondary btn-sm">Change Password</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>Your Quizzes</h2>
-{% if user.quizzes %}
-    <ul>
-    {% for quiz in user.quizzes %}
-        <li>{{ quiz.title }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>You haven't created any quizzes yet.</p>
-{% endif %}
-
-<a href="{{ url_for('users.logout') }}">Logout</a>
+<!-- User's Quizzes Section -->
+<h4 class="mt-5">Your Quizzes</h4>
+<div class="list-group">
+    {% if user.quizzes %}
+        {% for quiz in user.quizzes %}
+            <a href="{{ url_for('quizzes.view_quiz', quiz_id=quiz.id) }}" class="list-group-item list-group-item-action">
+                <h5 class="mb-1">{{ quiz.title }}</h5>
+                <p class="mb-1">{{ quiz.description }}</p>
+                <small class="text-muted">Created on {{ quiz.created_at.strftime('%B %d, %Y') }}</small>
+            </a>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">You have not created any quizzes yet.</p>
+    {% endif %}
+</div>
 {% endblock %}
