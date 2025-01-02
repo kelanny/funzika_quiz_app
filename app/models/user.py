@@ -4,7 +4,6 @@ from app import db, login_manager
 from flask_login import UserMixin
 from app.models.base_model import BaseModel
 from app.models.user_answer import UserAnswer
-from app.models.admin import Admin
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -21,13 +20,14 @@ class User(BaseModel):
     password_hash = db.Column(db.String(128), nullable=True)
 
     user_answers = db.relationship('UserAnswer', backref='user', lazy=True)
-    admin = db.relationship('Admin', backref='user', lazy=True)
+    is_admin = db.Column(db.Boolean, default=False)
 
-    def __init__(self, username, email, password_hash):
+    def __init__(self, username, email, password_hash, is_admin=False):
         """Initialize the user"""
         self.username = username
         self.email = email
         self.password_hash = password_hash
+        self.is_admin = is_admin
 
     # Flask-Login required methods
     @property
@@ -44,4 +44,10 @@ class User(BaseModel):
 
     def get_id(self):
         return str(self.id)  # Return the user's unique identifier
+    
+    def make_admin(self):
+        """Change user to admin"""
+        self.is_admin = True
+        db.session.commit()
+        return True
 
