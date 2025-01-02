@@ -13,7 +13,7 @@ class Quiz(BaseModel, db.Model):
     description = db.Column(db.TEXT)
     is_active = db.Column(db.Boolean)
 
-    questions = db.relationship('Question', backref='quiz', lazy=True)
+    questions = db.relationship('Question', backref='quiz', lazy=True, cascade='all, delete')
 
     def __init__(self, title, description, is_active=False):
         """Instantiates a new quiz"""

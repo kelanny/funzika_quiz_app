@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Contains the Question class """
 from app.models.base_model import BaseModel
+from app.models.answer import Answer
 from app import db
 
 
@@ -13,9 +14,10 @@ class Question(BaseModel):
 
     answers = db.relationship('Answer', backref='question', lazy=True)
 
-    def __init__(self, text):
+    def __init__(self, text, quiz_id):
         """initializes question"""
         super().__init__()
         self.text = text
+        self.quiz_id = quiz_id
 
  

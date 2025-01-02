@@ -17,6 +17,9 @@ class DevConfig(Config):
         getenv('MYSQL_DEV_PORT'),
         getenv('MYSQL_DEV_DB')
     )
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = 'your_csrf_secret_key'
+
 
 class TestingConfig(Config):
     TESTING = True
@@ -38,3 +41,5 @@ class ProdConfig(Config):
         getenv('MYSQL_PROD_PORT'),
         getenv('MYSQL_PROD_DB')
     )
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = 'your_csrf_secret_key'

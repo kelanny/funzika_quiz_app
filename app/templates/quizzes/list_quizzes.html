@@ -47,9 +47,10 @@
                                     Are you sure you want to delete the quiz "<strong>{{ quiz.title }}</strong>"?
                                 </div>
                                 <div class="modal-footer">
-                                    <form method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}">
-                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                                    </form>
+                                   <form method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}">
+                                        {{ delete_form.hidden_tag() }}
+                                        <button type="submit" class="btn btn-danger">{{ delete_form.submit.label.text }}</button>
+                                    </form> 
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 </div>
                             </div>

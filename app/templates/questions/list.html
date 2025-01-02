@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Questions</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="lead">Manage all your quiz questions below.</p>
+        <a href="{{ url_for('questions.create_question') }}" class="btn btn-primary">Add Question</a>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Question Text</th>
+                <th>Quiz Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.text }}</td>
+                <td>{{ question.quiz.title }}</td>
+                <td>
+                    <a href="{{ url_for('questions.edit_question', question_id=question.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <!-- Use a form to submit the delete request -->
+                    <form method="POST" action="{{ url_for('questions.delete_question', question_id=question.id) }}" style="display:inline-block;">
+                        {{ delete_form.hidden_tag() }}
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

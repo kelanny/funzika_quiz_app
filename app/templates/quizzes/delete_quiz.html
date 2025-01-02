@@ -1,23 +1,19 @@
-<button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ quiz.id }}">Delete</button>
+{{ extends 'base.html' }}
+{% block title %}Delete Quiz{% endblock %}
 
-<!-- Modal -->
-<div class="modal fade" id="deleteModal-{{ quiz.id }}" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete the quiz "{{ quiz.title }}"?
-            </div>
-            <div class="modal-footer">
-                <form method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}">
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
+{% block content %}
+
+<div class="container mt-5">
+        <h1 class="text-danger">Delete Quiz</h1>
+        <p>Are you sure you want to delete the quiz titled <strong>{{ quiz.title }}</strong>?</p>
+        <p>Description: {{ quiz.description }}</p>
+
+        <form method="POST" action="{{ url_for('quizzes.delete_quiz', quiz_id=quiz.id) }}">
+            {{ delete_form.hidden_tag() }}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            <a href="{{ url_for('quizzes.list_quizzes') }}" class="btn btn-secondary">Cancel</a>
+        </form>
 </div>
+
+{% endblock %}
 

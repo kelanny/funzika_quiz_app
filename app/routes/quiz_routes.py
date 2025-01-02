@@ -1,9 +1,11 @@
 """Routes for the application."""
+from flask_login import login_required
 from flask import Blueprint, flash, redirect, render_template, request, url_for 
 from app import db
 from app.models.quiz import Quiz
 from app.models.question import Question
 from app.forms.quiz_forms import QuizForm
+from app.forms.question_forms import QuestionForm, DeleteQuestionForm
 
 
 quiz_blueprint = Blueprint('quizzes', __name__, template_folder='templates')
@@ -39,24 +41,53 @@ def edit_quiz(quiz_id):
     return render_template('quizzes/edit_quiz.html', form=form, quiz=quiz)
 
 # Delete Quiz
-@quiz_blueprint.route('/delete/<string:quiz_id>', methods=['POST'])
+@quiz_blueprint.route('/<string:quiz_id>/delete', methods=['POST'])
 def delete_quiz(quiz_id):
+    """Delete a quiz"""
+    delete_form = DeleteQuestionForm()
+    # Validate CSRF token
+    if not delete_form.validate_on_submit():
+        flash('Invalid CSRF token. Action denied.', 'danger')
+        return redirect(url_for('quizzes.list_quizzes'))
+
+    # Proceed with deleting the quiz
     quiz = Quiz.query.get_or_404(quiz_id)
     db.session.delete(quiz)
     db.session.commit()
+
     flash('Quiz deleted successfully!', 'success')
     return redirect(url_for('quizzes.list_quizzes'))
+    return render_template('quizzes/delete_quiz.html', delete_form=delete_form, quiz=quiz)
 
 # List Quizzes (for reference)
 @quiz_blueprint.route('/', methods=['GET'])
 def list_quizzes():
+    """List all quizzes"""
     quizzes = Quiz.query.all()
-    return render_template('quizzes/list_quizzes.html', quizzes=quizzes)
+    delete_form = DeleteQuestionForm()  # Create the form instance
+    return render_template(
+        'quizzes/list_quizzes.html',
+        quizzes=quizzes,
+        delete_form=delete_form
+        )
 
 
-@quiz_blueprint.route('<quiz_id>', methods=['GET'])
+@quiz_blueprint.route('<quiz_id>', methods=['GET', 'POST'])
+@login_required
 def view_quiz(quiz_id):
     """View a specific quiz and its questions."""
     quiz = Quiz.query.get_or_404(quiz_id)
-    questions = Question.query.filter_by(quiz_id=quiz.id).all()
-    return render_template('quizzes/view_quiz.html', quiz=quiz, questions=questions)
+    question_form = QuestionForm()
+
+    if question_form.validate_on_submit():
+        new_question = Question(
+            text=question_form.text.data,
+            quiz_id=quiz.id
+        )
+        db.session.add(new_question)
+        db.session.commit()
+        flash('Question created successfully!', 'success')
+        return redirect(url_for('quizzes.view_quiz', quiz_id=quiz.id))
+
+    return render_template('quizzes/view_quiz.html', quiz=quiz, question_form=question_form)
+

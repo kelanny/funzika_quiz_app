@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from flask_login import LoginManager
 import os
@@ -10,6 +11,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 
 def create_app():
@@ -28,6 +30,7 @@ def create_app():
 
     db.init_app(app)
     bcrypt.init_app(app)
+    csrf.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'users.login'
     login_manager.login_message_category = 'info'
@@ -37,9 +40,11 @@ def create_app():
     
     # Register blueprints
     from app.routes.quiz_routes import quiz_blueprint
+    from app.routes.question_routes import questions_bp
     from app.routes.user_routes import users
 
     app.register_blueprint(quiz_blueprint, url_prefix='/quizzes')
+    app.register_blueprint(questions_bp, url_prefix='/questions')
     app.register_blueprint(users)
 
     with app.app_context():
