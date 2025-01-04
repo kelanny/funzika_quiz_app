@@ -1,8 +1,14 @@
 """Routes for the application."""
+<<<<<<< Updated upstream
 from flask import Blueprint, flash, redirect, render_template, request, url_for 
+=======
+from flask_login import login_required
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session
+>>>>>>> Stashed changes
 from app import db
 from app.models.quiz import Quiz
 from app.models.question import Question
+from app.models.answer import Answer
 from app.forms.quiz_forms import QuizForm
 
 
@@ -58,5 +64,69 @@ def list_quizzes():
 def view_quiz(quiz_id):
     """View a specific quiz and its questions."""
     quiz = Quiz.query.get_or_404(quiz_id)
+<<<<<<< Updated upstream
     questions = Question.query.filter_by(quiz_id=quiz.id).all()
     return render_template('quizzes/view_quiz.html', quiz=quiz, questions=questions)
+=======
+    question_form = QuestionForm()
+
+    if question_form.validate_on_submit():
+        new_question = Question(
+            text=question_form.text.data,
+            quiz_id=quiz.id
+        )
+        db.session.add(new_question)
+        db.session.commit()
+        flash('Question created successfully!', 'success')
+        return redirect(url_for('quizzes.view_quiz', quiz_id=quiz.id))
+
+    return render_template('quizzes/view_quiz.html', quiz=quiz, question_form=question_form)
+
+@quiz_blueprint.route('/quiz/<quiz_id>', methods=['GET', 'POST'])
+def quiz(quiz_id):
+    """Display quiz questions and handle user answers."""
+    # Fetch current question index from session
+    current_question_index = session.get('current_question_index', 0)
+
+    # Get the quiz
+    quiz = Quiz.query.get_or_404(quiz_id)
+    
+    # Get all questions for the quiz
+    questions = Question.query.filter_by(quiz_id=quiz_id).all()
+    
+    # Check if there are no more questions
+    if current_question_index >= len(questions):
+        # Redirect to the results page or completion page
+        return redirect(url_for('quiz_complete', quiz_id=quiz_id))
+    
+    # Get the current question and its answers
+    current_question = questions[current_question_index]
+    answers = Answer.query.filter_by(question_id=current_question.id).all()
+    
+    if request.method == 'POST':
+        # Handle user answer submission
+        selected_answer_id = request.form.get('answer')
+        selected_answer = Answer.query.get(selected_answer_id)
+        
+        # Update score if the answer is correct
+        if selected_answer and selected_answer.is_correct:
+            session['score'] = session.get('score', 0) + 1
+        
+        # Move to the next question
+        session['current_question_index'] += 1
+        
+        # Redirect to reload the page
+        return redirect(url_for('quiz', quiz_id=quiz_id))
+    
+    # Render the template with the current question and answers
+    return render_template(
+        'quiz.html',
+        quiz=quiz,
+        question=current_question,
+        answers=answers,
+        progress=current_question_index + 1,
+        total=len(questions),
+        score=session.get('score', 0)
+    )
+
+>>>>>>> Stashed changes
