@@ -47,6 +47,13 @@ def create_app():
     app.register_blueprint(questions_bp, url_prefix='/questions')
     app.register_blueprint(users)
 
+    # Register CLI commands
+    from app.commands import quiz_cli, question_cli, user_cli, answer_cli
+    app.cli.add_command(quiz_cli)
+    app.cli.add_command(question_cli)
+    app.cli.add_command(user_cli)
+    app.cli.add_command(answer_cli)
+
     with app.app_context():
         from app.models.base_model import BaseModel
         from app.models.user import User
