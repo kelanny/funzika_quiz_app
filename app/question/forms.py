@@ -6,7 +6,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import DataRequired
-from app.models.quiz import Quiz
+
 
 class QuestionForm(FlaskForm):
     """Question form class"""

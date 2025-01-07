@@ -1,14 +1,13 @@
-#!/usr/bin/env python
-"""User Forms"""
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, \
     Email, EqualTo, ValidationError
-from app.models.user import User
+from app.user.models import User
 
 
 class RegistrationForm(FlaskForm):
+    """User Registration Form"""
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -32,6 +31,7 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """User Login Form"""
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')

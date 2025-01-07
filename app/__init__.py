@@ -39,20 +39,26 @@ def create_app():
     migrate.init_app(app, db)
     
     # Register blueprints
-    from app.routes.quiz_routes import quiz_blueprint
-    from app.routes.question_routes import questions_bp
-    from app.routes.user_routes import users
+    from app.quiz.routes import quiz_blueprint
+    from app.question.routes import questions_bp
+    from app.user.routes import users
 
     app.register_blueprint(quiz_blueprint, url_prefix='/quizzes')
     app.register_blueprint(questions_bp, url_prefix='/questions')
     app.register_blueprint(users)
 
     # Register CLI commands
-    from app.commands import quiz_cli, question_cli, user_cli, answer_cli
+    from app.quiz.cli import quiz_cli
+    from app.question.cli import question_cli
+    from app.user.cli import user_cli
+    from app.answer.cli import answer_cli
+    from app.user_answer.cli import user_answer_cli
+
     app.cli.add_command(quiz_cli)
     app.cli.add_command(question_cli)
     app.cli.add_command(user_cli)
     app.cli.add_command(answer_cli)
+    app.cli.add_command(user_answer_cli)
 
     with app.app_context():
         from app.base_model import BaseModel
@@ -63,4 +69,3 @@ def create_app():
         from app.user_answer.models import UserAnswer
   
     return app
-

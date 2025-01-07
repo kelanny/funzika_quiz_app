@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Contains the Quiz class"""
 from app import db
-from app.models.base_model import BaseModel
+from app.base_model import BaseModel
 
 
 class Quiz(BaseModel, db.Model):
@@ -27,6 +27,6 @@ class Quiz(BaseModel, db.Model):
         quiz_dict.update({
             'title': self.title,
             'description': self.description,
-            'is_active': self.is_active
+            'is_active': self.is_active,
             'questions': self.questions
         })
