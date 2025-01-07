@@ -112,7 +112,7 @@ def quiz(quiz_id):
     # Check if there are no more questions
     if current_question_index >= len(questions):
         # Redirect to the results page or completion page
-        return redirect(url_for('quiz_complete', quiz_id=quiz_id))
+        return redirect(url_for('quizzes.list_quizzes', quiz_id=quiz_id))
     
     # Get the current question and its answers
     current_question = questions[current_question_index]

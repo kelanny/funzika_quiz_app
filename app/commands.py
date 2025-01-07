@@ -184,6 +184,20 @@ def add_user(username, email, password, is_admin):
     db.session.commit()
     click.echo(f"User '{username}' added successfully.")
 
+@user_cli.command("add-admin")
+@click.option("--username", prompt=True, help="The username of the user.")
+@click.option(("--email"), prompt=True, help="The email of the user.")
+@click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True, help="The password of the user.")
+@click.option("--is_admin", prompt=True, type=bool, default=True, help="Whether the user is an admin.")
+def add_admin(username, email, password, is_admin):
+    """Add a new user."""
+    from app import bcrypt
+
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    user = User(username=username, email=email, password_hash=hashed_password, is_admin=is_admin)
+    db.session.add(user)
+    db.session.commit()
+    click.echo(f"User '{username}' added successfully.")
 
 @user_cli.command("list")
 def list_users():
@@ -196,7 +210,7 @@ def list_users():
     for user in users:
         click.echo(f"{user.id}: {user.username} - {user.email} - Admin: {user.is_admin}")
     
-@user_cli.command("list_admin")
+@user_cli.command("list-admin")
 def list_admins():
     """List all admins."""
     admins = User.query.filter_by(is_admin=True).all()
