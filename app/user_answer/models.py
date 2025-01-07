@@ -29,3 +29,4 @@ class UserAnswer(BaseModel):
             'question_id': self.question_id,
             'selected_answer_id': self.selected_answer_id
         })
+        return user_answer_dict

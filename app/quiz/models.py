@@ -30,3 +30,4 @@ class Quiz(BaseModel, db.Model):
             'is_active': self.is_active,
             'questions': self.questions
         })
+        return quiz_dict

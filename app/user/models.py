@@ -40,6 +40,7 @@ class User(BaseModel):
         self.is_admin = is_admin
 
     def to_dict(self):
+        """Return a dictionary representation of the object"""
         user_dict = super().to_dict()
         user_dict.update({
             'username': self.username,
@@ -48,6 +49,7 @@ class User(BaseModel):
             'is_admin': self.is_admin,
             'user_answers': self.user_answers
         })
+        return user_dict
 
     # Flask-Login required methods
     @property

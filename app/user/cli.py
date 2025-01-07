@@ -5,6 +5,8 @@ import click
 from flask.cli import AppGroup
 from app import db
 from app.user.models import User
+from app.question.models import Question
+from app.answer.models import Answer
 
 
 # User CLI group
@@ -56,43 +58,132 @@ def list_users():
     if not users:
         click.echo("No users found.")
         return
-
-    for user in users:
-        click.echo(f"{user.id}: {user.username} - \
-                   {user.email} - Admin: {user.is_admin}")
-
-
-@user_cli.command("list-admin")
-def list_admins():
-    """List all admins."""
-    admins = User.query.filter_by(is_admin=True).all()
-    if not admins:
-        click.echo("No admins found.")
-        return
-    click.echo("Admins:")
+    click.echo("List of users:")
+    click.echo("Number of users: {}".format(len(users)))
     click.echo("-" * 100)
-    for admin in admins:
-        click.echo(f"{admin.id}: {admin.username} - \
-                   {admin.email} - Admin: {admin.is_admin}")
+
+    for idx, user in enumerate(users, 1):
+        click.echo("#: {}".format(idx))
+        click.echo(
+            f"User ID:{user.id}"
+            f"\nUsername: {user.username}"
+            f"\nEmail: {user.email}"
+            f"\nRole: {'Admin' if user.is_admin else 'User'}\n"
+        )
+        click.echo("-" * 100)
 
 
 @user_cli.command("delete")
-@click.argument("user_id")
-def delete_user(user_id):
-    """Delete a user."""
-    user = User.query.get(user_id)
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-        click.echo(f"User '{user.username}' deleted successfully.")
+@click.option('--user_id', default=None, type=int, help='User ID')
+@click.option('--username', default=None, type=str, help='Username')
+@click.option('--email', default=None, type=str, help="User email")
+def delete_user(user_id=None, username=None, email=None):
+    """Delete selected user from the database."""
+    user = None
+    # Fetch user based on the provided argument
+    if user_id:
+        user = User.query.get(user_id)  # Get by primary key
+    elif username:
+        user = User.query.filter_by(username=username).first()
+    elif email:
+        user = User.query.filter_by(email=email).first()
     else:
-        click.echo(f"User with ID {user_id} not found.")
+        click.echo("You must provide either --user_id, --username, or --email.")
+        return
+
+    # Handle case where user is not found
+    if not user:
+        click.echo("User not found.")
+        return
+
+    db.session.delete(user)
+    db.session.commit()
+    click.echo(f"User '{user.username}' deleted successfully.")
+
 
 @user_cli.command("view")
-@click.argument('email')
-def view_user(email):
-    user = User.query.get(email)
+@click.option('--user_id', default=None, type=int, help='User ID')
+@click.option('--username', default=None, type=str, help='Username')
+@click.option('--email', default=None, type=str, help="User email")
+def view_user(user_id=None, username=None, email=None):
+    """View user details."""
+    user = None
+    # Fetch user based on the provided argument
+    if user_id:
+        user = User.query.get(user_id)  # Get by primary key
+    elif username:
+        user = User.query.filter_by(username=username).first()
+    elif email:
+        user = User.query.filter_by(email=email).first()
+    else:
+        click.echo("You must provide either --user_id, --username, or --email.")
+        return
+
+    # Handle case where user is not found
     if not user:
-        click.echo(f'User {email} was not found.')
-    # click.echo(f"User ID: {user.id}\nUsername: {user.username}\nEmail: {user.email}")
-    click.echo(f"{user}")
+        click.echo("User not found.")
+        return
+
+    click.echo(
+        f"User ID:{user.id}"
+        f"\nUsername: {user.username}"
+        f"\nEmail: {user.email}"
+        f"\nRole: {'Admin' if user.is_admin else 'User'}\n"
+        )
+
+
+@user_cli.command('list_answers')
+@click.option('--user_id', default=None, type=int, help='User ID')
+@click.option('--username', default=None, type=str, help='Username')
+@click.option('--email', default=None, type=str, help="User email")
+def list_user_answers(user_id=None, username=None, email=None):
+    """List all answers selected by this user."""
+    user = None
+
+    # Fetch user based on the provided argument
+    if user_id:
+        user = User.query.get(user_id)  # Get by primary key
+    elif username:
+        user = User.query.filter_by(username=username).first()
+    elif email:
+        user = User.query.filter_by(email=email).first()
+    else:
+        click.echo("You must provide either --user_id, --username, or --email.")
+        return
+
+    # Handle case where user is not found
+    if not user:
+        click.echo("User not found.")
+        return
+
+    # List user's selected answers
+    selected_answers = user.user_answers  # Assuming `user_answers` is a relationship on the `User` model
+    total_score = 0
+
+    click.echo(f"Username: {user.username}")
+    click.echo(f"User ID: {user.id}")
+    click.echo(f"Attempted questions: {len(selected_answers)}")
+    click.echo("Selected Answers:\n")
+
+    for idx, answer in enumerate(selected_answers, 1):
+        question = Question.query.get(answer.question_id)
+        selected_answer = Answer.query.get(answer.selected_answer_id)
+
+        if selected_answer.is_correct:
+            status = 'Correct'
+            score = question.score
+        else:
+            status = 'Wrong'
+            score = 0
+        total_score += score
+
+        click.echo(
+            f"\t#: {idx}\n"
+            f"\tQuestion: {question.text}\n"
+            f"\tAnswer: {selected_answer.text}\n"
+            f"\tStatus: {status}\n"
+            f"\tScore: {score}\n"
+        )
+
+    click.echo("\nTotal Score: {}".format(total_score))
+    click.echo("-" * 100)

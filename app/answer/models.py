@@ -26,3 +26,4 @@ class Answer(BaseModel):
             'is_correct': self.is_correct,
             'question_id': self.question_id
         })
+        return answer_dict
