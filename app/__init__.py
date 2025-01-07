@@ -55,12 +55,12 @@ def create_app():
     app.cli.add_command(answer_cli)
 
     with app.app_context():
-        from app.models.base_model import BaseModel
-        from app.models.user import User
-        from app.models.quiz import Quiz
-        from app.models.question import Question
-        from app.models.answer import Answer
-        from app.models.user_answer import UserAnswer
+        from app.base_model import BaseModel
+        from app.user.models import User
+        from app.quiz.models import Quiz
+        from app.question.models import Question
+        from app.answer.models import Answer
+        from app.user_answer.models import UserAnswer
   
     return app
 

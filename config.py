@@ -10,14 +10,14 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False # Disable the modification tracker
 
 class DevConfig(Config):
-    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL')
-    # 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
-    #     getenv('MYSQL_DEV_USER'),
-    #     getenv('MYSQL_DEV_PASSWORD'),
-    #     getenv('MYSQL_DEV_HOST'),
-    #     getenv('MYSQL_DEV_PORT'),
-    #     getenv('MYSQL_DEV_DB')
-    # )
+    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL') or \
+    'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+        getenv('MYSQL_DEV_USER'),
+        getenv('MYSQL_DEV_PASSWORD'),
+        getenv('MYSQL_DEV_HOST'),
+        getenv('MYSQL_DEV_PORT'),
+        getenv('MYSQL_DEV_DB')
+    )
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = 'your_csrf_secret_key'
 
