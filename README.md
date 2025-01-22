@@ -8,7 +8,7 @@ A dynamic and user-friendly web application designed for creating, taking, and m
 
 - **User Authentication:** Secure sign-up and login functionality.
 - **Quiz Management:** Admins can create, update, and delete quizzes and their questions.
-- **Real-time Quiz Interface:** Users can attempt quizzes with interactive features such as timers and instant feedback.
+- **Real-time Quiz Interface:** Users can attempt quizzes with interactive features such as instant feedback.
 - **Result Analysis:** Users receive detailed results with scores and performance insights after completing a quiz.
 - **Responsive Design:** Optimized for desktop and mobile devices.
 - **Scalable Architecture:** Built with a modular and maintainable codebase.
@@ -30,9 +30,9 @@ A dynamic and user-friendly web application designed for creating, taking, and m
 ```
 ├── /app            # Application files including models and routes
 │   ├── __init__.py # Initialize the app module
-│   ├── db_storage.py # Handles database interactions
-│   ├── /models     # Database models
-│   ├── /routes     # Flask routes (APIs and views)
+│   ├── /quiz # Handles database interactions
+│   ├── /question     # Database models
+│   ├── /answer     # Flask routes (APIs and views)
 ├── /static         # CSS, JavaScript, and images
 ├── /templates      # HTML templates for frontend views
 ├── /tests          # Unit and integration tests

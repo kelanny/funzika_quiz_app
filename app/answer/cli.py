@@ -12,11 +12,14 @@ answer_cli = AppGroup("answer")
 
 
 @answer_cli.command("add")
-@click.argument("text")
-@click.argument("is_correct", type=bool)
-@click.argument("question_id")
+@click.option("--text", required=True, help='Answer text.')
+@click.option("--is_correct", type=bool, help="Boolean for correct answer")
+@click.option("--question_id", required=True, help='ID for the related question.')
 def add_answer(text, is_correct, question_id):
     """Add a new answer."""
+    question = Question.query.get(question_id)
+    if not question:
+        click.echo("Question was not found.")
     answer = Answer(text=text, is_correct=is_correct, question_id=question_id)
     db.session.add(answer)
     db.session.commit()

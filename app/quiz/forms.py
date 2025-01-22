@@ -2,8 +2,10 @@
 """Quiz Forms"""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField
+from wtforms import (SelectField, SubmitField, RadioField,
+    StringField, TextAreaField, BooleanField)
 from wtforms.validators import DataRequired, Length
+from app import db
 
 
 class QuizForm(FlaskForm):
@@ -17,3 +19,8 @@ class QuizForm(FlaskForm):
 class DeleteQuizForm(FlaskForm):
     """Quiz delete form class"""
     submit = SubmitField('Delete')
+
+
+class QuizSelectionForm(FlaskForm):
+    quiz = SelectField("Select a Quiz", validators=[DataRequired()])
+    submit = SubmitField("Start Quiz")

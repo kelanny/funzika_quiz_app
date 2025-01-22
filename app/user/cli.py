@@ -31,6 +31,18 @@ def add_user(username, email, password, is_admin):
     db.session.commit()
     click.echo(f"User '{username}' added successfully.")
 
+@user_cli.command("make-admin")
+@click.option("--username", prompt=True, help="The username of the user.")
+def make_admin(username):
+    """Make a user an admin."""
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        click.echo("User not found.")
+        return
+
+    user.is_admin = True
+    db.session.commit()
+    click.echo(f"User '{username}' is now an admin.")
 
 @user_cli.command("add-admin")
 @click.option("--username", prompt=True, help="The username of the user.")

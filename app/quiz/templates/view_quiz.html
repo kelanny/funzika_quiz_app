@@ -10,40 +10,27 @@
         <ul class="list-group">
             {% for question in quiz.questions %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ question.text }}
+                   {{ loop.index }}. {{ question.text }}
+                    {% if current_user.is_admin %}
                     <form method="POST" action="{{ url_for('questions.delete_question', question_id=question.id) }}">
-                        {{ question_form.hidden_tag() }}
-                        {{ csrf_token() }} <!-- CSRF only here for the Delete button -->
+                        {{ question_form.hidden_tag() }} <!-- CSRF only here for the Delete button -->
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
+        {% if current_user.is_admin %}
+        <a href="{{ url_for('quiz.add_question', quiz_id=quiz.id) }}" class="btn btn-primary mt-3">Add Question</a>
 
-        <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addQuestionModal">Add Question</button>
+        {% endif %}
     </div>
+    {% if current_user.is_admin %}
+    <div class="card-footer">
+        <a href="#" class="btn btn-warning">Edit Quiz</a>
+        <a href="{{ url_for('quiz.delete_quiz', quiz_id=quiz.id) }}" class="btn btn-danger">Delete Quiz</a>
+    </div>
+    {% endif %}
 </div>
 
-<!-- Add Question Modal -->
-<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addQuestionModalLabel">Add Question</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ url_for('quizzes.view_quiz', quiz_id=quiz.id) }}">
-                    {{ question_form.hidden_tag() }} <!-- CSRF is correctly handled here -->
-                    {{ csrf_token() }}
-                    <div class="mb-3">
-                        <label for="text" class="form-label">Question Text</label>
-                        {{ question_form.text(class="form-control") }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Question</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}

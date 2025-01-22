@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Contains the Answer class """
 from app import db
-from app.base_model import BaseModel
+from app.models.base_model import BaseModel
 
 
 class Answer(BaseModel):
@@ -9,9 +9,18 @@ class Answer(BaseModel):
     __tablename__ = 'answers'
     text = db.Column(db.TEXT, nullable=False)
     is_correct = db.Column(db.Boolean, default=False, nullable=False)
-    question_id = db.Column(db.String(60),
-                            db.ForeignKey("questions.id"), nullable=False)
+    question_id = db.Column(
+        db.String(60),
+        db.ForeignKey("questions.id", ondelete='CASCADE'),
+        nullable=False
+        )
 
+    user_answers = db.relationship(
+        'UserAnswer',
+        backref='answer',
+        cascade="all, delete, delete-orphan",
+        lazy=True
+        )
     def __init__(self, text, question_id, is_correct=False):
         """Initialize the answer"""
         super().__init__()

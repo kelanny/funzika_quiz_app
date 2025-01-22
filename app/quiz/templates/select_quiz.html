@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Select Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center">Select a Quiz</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('quiz.select_quiz') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            <label for="quiz" class="form-label">Choose a Quiz:</label>
+                            {{ form.quiz(class="form-select", id="quiz") }}
+                        </div>
+                        
+                        <div class="text-center">
+                            {{ form.submit(class="btn btn-success btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

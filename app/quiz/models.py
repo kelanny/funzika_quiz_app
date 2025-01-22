@@ -1,7 +1,7 @@
-#!/usr/bin/python3
 """ Contains the Quiz class"""
 from app import db
-from app.base_model import BaseModel
+from app.models.base_model import BaseModel
+from app.question.models import Question
 
 
 class Quiz(BaseModel, db.Model):
@@ -13,7 +13,7 @@ class Quiz(BaseModel, db.Model):
     is_active = db.Column(db.Boolean)
 
     questions = db.relationship('Question', backref='quiz',
-                                lazy=True, cascade='all, delete')
+                                lazy=True, cascade='all, delete, delete-orphan')
 
     def __init__(self, title, description, is_active=False):
         """Instantiates a new quiz"""

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Complete{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-center">Quiz Complete!</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="text-center">{{ quiz.title }}</h3>
+            <hr>
+            <p class="text-center">
+                <strong>Total Questions:</strong> {{ total_questions }}
+            </p>
+            <p class="text-center">
+                <strong>Correct Answers:</strong> {{ correct_answers }}
+            </p>
+            <p class="text-center">
+                <strong>Your Score:</strong> <span class="text-success">{{ score_percentage }}%</span>
+            </p>
+            <hr>
+            <div class="text-center">
+                <a href="{{ url_for('quiz.select_quiz') }}" class="btn btn-primary">
+                    Back to Quiz Selection
+                </a>
+                <a href="{{ url_for('quiz.dashboard') }}" class="btn btn-secondary">
+                    Go to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

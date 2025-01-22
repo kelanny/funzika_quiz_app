@@ -17,7 +17,7 @@
                 <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
                 <p class="card-text"><strong>Bio:</strong> {{ user.bio or "No bio available" }}</p>
                 <p class="card-text"><small class="text-muted">Member since {{ user.created_at.strftime('%B %d, %Y') }}</small></p>
-                <a href="{{ url_for('users.user_profile') }}" class="btn btn-primary btn-sm">Edit Profile</a>
+                <a href="{{ url_for('user.user_profile') }}" class="btn btn-primary btn-sm">Edit Profile</a>
                 <a href="#" class="btn btn-secondary btn-sm">Change Password</a>
             </div>
         </div>

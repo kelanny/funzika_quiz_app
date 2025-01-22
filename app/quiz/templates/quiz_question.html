@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>{{ quiz.title }}</h4>
+                    <p class="mb-0">Question {{ question_number }} of {{ total_questions }}</p>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ question.text }}</p>
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+
+                        {% for answer_id, answer_text in form.answers.choices %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="answers" id="answer-{{ answer_id }}" value="{{ answer_id }}">
+                                <label class="form-check-label" for="answer-{{ answer_id }}">
+                                    {{ answer_text }}
+                                </label>
+                            </div>
+                        {% endfor %}
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Submit Answer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

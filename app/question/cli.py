@@ -5,6 +5,7 @@ import click
 from flask.cli import AppGroup
 from app import db
 from app.question.models import Question
+from app.quiz.models import Quiz
 
 
 # Question CLI group
@@ -12,11 +13,15 @@ question_cli = AppGroup("question")
 
 
 @question_cli.command("add")
-@click.argument("text")
-@click.argument("quiz_id")
-def add_question(text, quiz_id):
+@click.option("--text", required=True, help="The question text.")
+@click.option("--quiz_id", required=True, help='Reference to the quiz id.')
+@click.option("--score", required=True, type=int, help='Score for this question.')
+def add_question(text, quiz_id, score):
     """Add a new question."""
-    question = Question(text=text, quiz_id=quiz_id)
+    quiz = Quiz.query.get(quiz_id)
+    if not quiz:
+        click.echo("No quiz was found.")
+    question = Question(text=text, quiz_id=quiz.id, score=score)
     db.session.add(question)
     db.session.commit()
     click.echo(f"Question '{text}' added successfully.")
@@ -31,14 +36,38 @@ def list_questions():
         return
 
     for idx, question in enumerate(questions, 1):
-        click.echo(f"{idx}: {question.id}: {question.text}")
-        answers = question.answers
+        click.echo(f"Question: ({idx})")
+        click.echo(f"Question ID: {question.id}")
+        click.echo(f"Text: {question.text}")
+        click.echo(f"Score: {question.score}")
         click.echo("Answers:")
-        for answer in answers:
-            click.echo(f"\t- {answer.text} - Correct: {answer.is_correct}")
+        for answer in question.answers:
+            click.echo(
+                f"\t- {answer.id}"
+                f"\t- {answer.text}"
+                f"\t{'(Correct)' if answer.is_correct else ''}"
+                )
         click.echo("-" * 100)
         click.echo()
 
+@question_cli.command("view")
+@click.argument("question_id")
+def view_question(question_id):
+    """View a question."""
+    question = Question.query.get(question_id)
+    if question:
+        click.echo(f"Question ID: {question.id}")
+        click.echo(f"Text: {question.text}")
+        click.echo(f"Score: {question.score}")
+        click.echo("Answers:")
+        for answer in question.answers:
+            click.echo(
+                f"\t- {answer.id}"
+                f"\t- {answer.text}"
+                f"\t{'(Correct)' if answer.is_correct else ''}"
+                )
+    else:
+        click.echo(f"Question with ID {question_id} not found.")
 
 @question_cli.command("delete")
 @click.argument("question_id")

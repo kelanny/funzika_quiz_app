@@ -8,14 +8,14 @@ from flask_login import login_user, current_user, logout_user, login_required
 from app.user.forms import RegistrationForm, LoginForm
 
 
-users = Blueprint('users', __name__, template_folder='templates')
+user_bp = Blueprint('user', __name__, template_folder='templates')
 
 
-@users.route("/register", methods=['GET', 'POST'])
+@user_bp.route("/register", methods=['GET', 'POST'])
 def register():
     """Register new user."""
     if current_user.is_authenticated:
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.landing'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(
@@ -27,15 +27,15 @@ def register():
         db.session.commit()
         flash(f'Your account has been created! \
               You are now able to log in', 'success')
-        return redirect(url_for('users.login'))
-    return render_template('users/register.html', title='Register', form=form)
+        return redirect(url_for('user.login'))
+    return render_template('register.html', title='Register', form=form)
 
 
-@users.route("/login", methods=['GET', 'POST'])
+@user_bp.route("/login", methods=['GET', 'POST'])
 def login():
     """Log in user"""
     if current_user.is_authenticated:
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.landing'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -44,32 +44,32 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page \
-                else redirect(url_for('users.home'))
+                else redirect(url_for('main.landing'))
         else:
             flash('Login Unsuccessful. \
                   Please check email and password', 'danger')
-    return render_template('users/login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form)
 
 
-@users.route("/logout")
+@user_bp.route("/logout")
 def logout():
     """Logout user account"""
     logout_user()
-    return redirect(url_for('users.home'))
+    return redirect(url_for('main.landing'))
 
 
-@users.route("/delete_account")
+@user_bp.route("/delete_account")
 @login_required
 def delete_account():
     """Delete user from the database"""
     db.session.delete(current_user)
     db.session.commit()
-    return redirect(url_for('users.home'))
-    return render_template('users/delete_account.html', title='Delete Account')
+    return redirect(url_for('main.landing'))
+    return render_template('delete_account.html', title='Delete Account')
 
 
-@users.route('/profile', methods=['GET'])
+@user_bp.route('/profile', methods=['GET'])
 @login_required
 def user_profile():
     """Render the user's profile page."""
-    return render_template('/users/profile.html', user=current_user)
+    return render_template('profile.html', user=current_user)

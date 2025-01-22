@@ -2,7 +2,7 @@
 """ Contains the User class"""
 from app import db, login_manager
 from flask_login import UserMixin
-from app.base_model import BaseModel
+from app.models.base_model import BaseModel
 from app.user_answer.models import UserAnswer
 
 
@@ -29,7 +29,12 @@ class User(BaseModel):
     email = db.Column(db.String(128), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=True)
 
-    user_answers = db.relationship('UserAnswer', backref='user', lazy=True)
+    user_answers = db.relationship(
+        'UserAnswer',
+        backref='user',
+        cascade="all, delete, delete-orphan",
+        lazy=True
+        )
     is_admin = db.Column(db.Boolean, default=False)
 
     def __init__(self, username, email, password_hash, is_admin=False):
@@ -51,15 +56,14 @@ class User(BaseModel):
         })
         return user_dict
 
-    # Flask-Login required methods
-    @property
-    def is_authenticated(self):
-        """Check if user is authenticated"""
-        return True
 
     @property
     def is_active(self):
         """Checks if user is active"""
+        return True
+    
+    @property
+    def is_authenticated(self):
         return True
 
     @property
@@ -74,4 +78,4 @@ class User(BaseModel):
         """Change user to admin"""
         self.is_admin = True
         db.session.commit()
-        return True
+

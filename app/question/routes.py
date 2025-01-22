@@ -38,7 +38,7 @@ def create_question():
         flash('Question created successfully!', 'success')
         return redirect(url_for('questions.list_questions'))
 
-    return render_template('questions/new.html', form=form)
+    return render_template('new.html', form=form)
 
 
 @questions_bp.route('/<question_id>/edit', methods=['GET', 'POST'])
@@ -55,14 +55,14 @@ def edit_question(question_id):
         flash('Question updated successfully!', 'success')
         return redirect(url_for('questions.list_questions'))
 
-    return render_template('questions/edit.html', form=form, question=question)
+    return render_template('edit.html', form=form, question=question)
 
 
-# @questions_bp.route('/<question_id>')
-# def view_question(question_id):
-#     """Display a single question's details."""
-#     question = Question.query.get_or_404(question_id)
-#     return render_template('questions/view_question.html', question=question)
+@questions_bp.route('/<question_id>')
+def view_question(question_id):
+    """Display a single question's details."""
+    question = Question.query.get_or_404(question_id)
+    return render_template('view_question.html', question=question)
 
 
 @questions_bp.route('/<question_id>/delete', methods=['POST'])
@@ -78,5 +78,5 @@ def delete_question(question_id):
         flash('Question deleted successfully!', 'success')
         return redirect(url_for('questions.list_questions'))
 
-    return render_template('questions/delete.html',
+    return render_template('delete.html',
                            question=question, delete_form=delete_form)

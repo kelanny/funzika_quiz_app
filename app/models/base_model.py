@@ -57,6 +57,7 @@ class BaseModel(db.Model):
         """
         dictionary = {key: value for key, value in self.__dict__.items()
                       if not key.startswith("_")}
+        dictionary["id"] = self.id
         dictionary["created_at"] = self.created_at.isoformat() \
             if self.created_at else None
         dictionary["updated_at"] = self.updated_at.isoformat() \

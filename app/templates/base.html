@@ -13,7 +13,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url_for('users.home') }}">Funzika</a>
+                <a class="navbar-brand" href="{{ url_for('main.landing') }}">Funzika</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -21,20 +21,28 @@
                     <ul class="navbar-nav ms-auto">
                         {% if current_user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('quizzes.list_quizzes') }}">Quizzes</a>
+                                <a class="nav-link" href="{{ url_for('quiz.list_quizzes') }}">Quizzes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('users.user_profile') }}">Profile</a>
+                                <a class="nav-link" href="{{ url_for('quiz.dashboard') }}">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-danger" href="{{ url_for('users.logout') }}">Logout</a>
+                                <a class="nav-link" href="{{ url_for('user.user_profile') }}">
+                                    {% if current_user.is_admin %}
+                                        <span class="badge bg-warning text-dark">{{ current_user.username }} - (Admin)</span>
+                                    {% else %}
+                                        {{ current_user.username }}
+                                    {% endif %}
+                                    </a>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="{{ url_for('user.logout') }}">Logout</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
+                                <a class="nav-link" href="{{ url_for('user.login') }}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
+                                <a class="nav-link" href="{{ url_for('user.register') }}">Register</a>
                             </li>
                         {% endif %}
                     </ul>
