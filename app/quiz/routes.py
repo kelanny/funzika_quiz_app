@@ -205,38 +205,40 @@ def dashboard():
     )
 
 
-@quiz_bp.route('/<string:quiz_id>/add_question', methods=['POST'])
-@login_required
-def add_question(quiz_id):
-    add_question_form = AddQuestionForm()
-    if add_question_form.validate_on_submit():
-        print("Form validated successfully")
-        print("Quiz ID:", quiz_id)
-        print("Form data:", add_question_form.data)
-        question_text = add_question_form.question_text.data
-        score = int(add_question_form.score.data)
-        answer_1 = add_question_form.answer_1.data
-        answer_2 = add_question_form.answer_2.data
-        answer_3 = add_question_form.answer_3.data
-        answer_4 = add_question_form.answer_4.data
-        correct_answer = int(add_question_form.correct_answer.data)
+# @quiz_bp.route('/<string:quiz_id>/add_question', methods=['POST'])
+# @login_required
+# def add_question(quiz_id):
+#     add_question_form = AddQuestionForm()
+#     if add_question_form.validate_on_submit():
+#         print("Form validated successfully")
+#         print("Quiz ID:", quiz_id)
+#         print("Form data:", add_question_form.data)
+#         question_text = add_question_form.question_text.data
+#         score = int(add_question_form.score.data)
+#         answer_1 = add_question_form.answer_1.data
+#         answer_2 = add_question_form.answer_2.data
+#         answer_3 = add_question_form.answer_3.data
+#         answer_4 = add_question_form.answer_4.data
+#         correct_answer = int(add_question_form.correct_answer.data)
 
-        # Create the question
-        question = Question(text=question_text, quiz_id=quiz_id, score=score)
-        db.session.add(question)
-        db.session.commit()
+#         # Create the question
+#         question = Question(text=question_text, quiz_id=quiz_id, score=score)
+#         db.session.add(question)
+#         db.session.commit()
 
-        # Create the answer answers
-        answers = [
-            Answer(text=answer_1, question_id=question.id, is_correct=(correct_answer == 1)),
-            Answer(text=answer_2, question_id=question.id, is_correct=(correct_answer == 2)),
-            Answer(text=answer_3, question_id=question.id, is_correct=(correct_answer == 3)),
-            Answer(text=answer_4, question_id=question.id, is_correct=(correct_answer == 4)),
-        ]
-        db.session.add_all(answers)
-        db.session.commit()
+#         # Create the answer answers
+#         answers = [
+#             Answer(text=answer_1, question_id=question.id, is_correct=(correct_answer == 1)),
+#             Answer(text=answer_2, question_id=question.id, is_correct=(correct_answer == 2)),
+#             Answer(text=answer_3, question_id=question.id, is_correct=(correct_answer == 3)),
+#             Answer(text=answer_4, question_id=question.id, is_correct=(correct_answer == 4)),
+#         ]
+#         db.session.add_all(answers)
+#         db.session.commit()
 
-        flash('Question and answers added successfully!', 'success')
-        return redirect(url_for('quiz.view_quiz', quiz_id=quiz_id))
+#         flash('Question and answers added successfully!', 'success')
+#         return redirect(url_for('quiz.view_quiz', quiz_id=quiz_id))
 
-    return render_template('add_question.html', add_question_form=add_question_form, quiz_id=quiz_id)
+#     return render_template('add_question.html', add_question_form=add_question_form, quiz_id=quiz_id)
+
+

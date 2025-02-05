@@ -7,6 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import login_required
 from app.question.models import Question
 from app.quiz.models import Quiz
+from app.answer.models import Answer
 from app.question.forms import QuestionForm, DeleteQuestionForm
 
 
@@ -19,26 +20,35 @@ def list_questions():
     questions = Question.query.all()
     delete_form = DeleteQuestionForm()  # Create the form instance
     return render_template(
-        'questions/list.html',
+        'list_questions.html',
         questions=questions,
         delete_form=delete_form
         )
 
 
-@questions_bp.route('/new', methods=['GET', 'POST'])
-def create_question():
-    """Create a new question"""
-    form = QuestionForm()
-    form.quiz_id.choices = [(quiz.id, quiz.title) for quiz in Quiz.query.all()]
+# @questions_bp.route('/new', methods=['GET', 'POST'])
+# def create_question():
+#     """Create a new question"""
+#     form = AddQuestionForm()
+#     form.quiz_id.choices = [(quiz.id, quiz.title) for quiz in Quiz.query.all()]
 
-    if form.validate_on_submit():
-        question = Question(text=form.text.data, quiz_id=form.quiz_id.data)
-        db.session.add(question)
-        db.session.commit()
-        flash('Question created successfully!', 'success')
-        return redirect(url_for('questions.list_questions'))
+#     if form.validate_on_submit():
+#         text = form.text.data
+#         quiz_id = form.quiz_id.data
+#         score = form.score.data
+#         answer_1 = form.answer_1.data
+#         answer_2 = form.answer_2.data
+#         answer_3 = form.answer_3.data
+#         answer_4 = form.answer_4.data
+#         correct_answer = int(form.correct_answer.data)
 
-    return render_template('new.html', form=form)
+#         question = Question(text=text, quiz_id=quiz_id, score=score)
+#         db.session.add(question)
+#         db.session.commit()
+#         flash('Question created successfully!', 'success')
+#         return redirect(url_for('questions.list_questions'))
+
+#     return render_template('add_question.html', form=form)
 
 
 @questions_bp.route('/<question_id>/edit', methods=['GET', 'POST'])
@@ -80,3 +90,39 @@ def delete_question(question_id):
 
     return render_template('delete.html',
                            question=question, delete_form=delete_form)
+
+
+@questions_bp.route('/add_question/<quiz_id>', methods=['GET', 'POST'])
+@login_required
+def add_question(quiz_id):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    form = QuestionForm()
+
+    if form.validate_on_submit():
+        # Extract question text
+        question_text = form.question_text.data
+        score = int(form.score.data)
+        # Validate that at least one correct answer is selected
+        if not any(answer.is_correct.data for answer in form.answers):
+            flash("At least one answer must be marked as correct.", "danger")
+            return render_template('admin_add_question.html', quiz=quiz, form=form)
+
+        # Add the question to the database
+        question = Question(quiz_id=quiz.id, text=question_text, score=score)
+        db.session.add(question)
+        db.session.flush()  # Flush to get the question.id
+
+        # Add answers
+        for answer_form in form.answers:
+            answer = Answer(
+                question_id=question.id,
+                text=answer_form.text.data,
+                is_correct=answer_form.is_correct.data
+            )
+            db.session.add(answer)
+
+        db.session.commit()
+        flash("Question and answers added successfully!", "success")
+        return redirect(url_for('questions.list_questions'))  # Replace with your admin dashboard route
+
+    return render_template('admin_add_question.html', quiz=quiz, form=form)

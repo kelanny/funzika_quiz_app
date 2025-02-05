@@ -1,19 +1,32 @@
 #!/usr/bin/env python
 """Question form module"""
 
-
-# forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, SelectField, RadioField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import (StringField, TextAreaField, BooleanField,
+                     FieldList, FormField, SubmitField,
+                     IntegerField, SelectField, RadioField)
+from wtforms.validators import DataRequired, Length
+
+
+class AnswerForm(FlaskForm):
+    text = StringField('Answer', validators=[DataRequired(), Length(max=255)])
+    is_correct = BooleanField('Correct Answer')
 
 
 class QuestionForm(FlaskForm):
-    """Question form class"""
+    question_text = TextAreaField('Question Text', validators=[DataRequired(), Length(max=1000)])
+    # quiz_id = SelectField('Quiz', validators=[DataRequired()])
+    score = IntegerField('Question Score', validators=[DataRequired()])
+    answers = FieldList(FormField(AnswerForm), min_entries=4, max_entries=4)
+    submit = SubmitField('Add Question')
 
-    quiz_id = SelectField('Quiz', validators=[DataRequired()])
-    text = TextAreaField('Question Text', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+
+# class QuestionForm(FlaskForm):
+#     """Question form class"""
+
+#     quiz_id = SelectField('Quiz', validators=[DataRequired()])
+#     text = TextAreaField('Question Text', validators=[DataRequired()])
+#     submit = SubmitField('Submit')
 
 class DeleteQuestionForm(FlaskForm):
     """Delete question form class"""
@@ -25,7 +38,8 @@ class QuestionNewForm(FlaskForm):
 
 
 class AddQuestionForm(FlaskForm):
-    question_text = StringField('Question Text', validators=[DataRequired()])
+    quiz_id = SelectField('Quiz', validators=[DataRequired()])
+    text = StringField('Question Text', validators=[DataRequired()])
     score = IntegerField('Score', validators=[DataRequired()])
     answer_1 = StringField('Answer 1', validators=[DataRequired()])
     answer_2 = StringField('Answer 2', validators=[DataRequired()])

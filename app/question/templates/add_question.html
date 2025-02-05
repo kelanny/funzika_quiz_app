@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Add a Question</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('questions.create_question') }}">
+                {{ form.hidden_tag() }}
+                <!-- Question Input -->
+                <div class="mb-3">
+                    <label for="text" class="form-label">Question Text</label>
+                    {{ form.text(class="form-control", placeholder="Enter your question") }}
+                </div>
+                <!--Question quiz id-->
+                <div class="mb-4">
+                    <label for="quiz_id" class="form-label">Choose a Quiz:</label>
+                    {{ form.quiz_id(class="form-select", id="quiz") }}
+                </div>
+
+                <!-- Question Score Input -->
+                <div class="mb-3">
+                    <label for="score" class="form-label">Question Score</label>
+                    {{ form.score(class="form-control", placeholder="Enter the score") }}
+                </div>
+
+                <!-- Answers Section -->
+                <div class="mb-3">
+                    <label for="answers" class="form-label">Answer Choices</label>
+                    <small class="d-block text-muted mb-2">Mark one as the correct answer.</small>
+                    <div class="form-check">
+                        {{ form.answer_1(class="form-control mb-2", placeholder="Answer 1") }}
+                        {{ form.answer_1.is_correct(class="form-check-input", id="correct1") }}
+                        <label class="form-check-label" for="correct1">Correct</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.answer_2(class="form-control mb-2", placeholder="Answer 2") }}
+                        {{ form.answer_2.is_correct(class="form-check-input", id="correct2") }}
+                        <label class="form-check-label" for="correct2">Correct</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.answer_3(class="form-control mb-2", placeholder="Answer 3") }}
+                        {{ form.answer_3.is_correct(class="form-check-input", id="correct3") }}
+                        <label class="form-check-label" for="correct3">Correct</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.answer_4(class="form-control mb-2", placeholder="Answer 4") }}
+                        {{ form.answer_4.is_correct(class="form-check-input", id="correct4") }}
+                        <label class="form-check-label" for="correct4">Correct</label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Add Question</button>
+                <a href="{{ url_for('question.list_questions') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

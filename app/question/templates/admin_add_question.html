@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Add Question{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Add a Question</h1>
+    <p class="text-muted text-center">For quiz: <strong>{{ quiz.title }}</strong></p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-4">
+            <label for="question_text" class="form-label">Question Text</label>
+            {{ form.question_text(class="form-control", rows="3") }}
+            {% for error in form.question_text.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <h4>Answers</h4>
+        {% for answer in form.answers %}
+            <div class="mb-3">
+                <label class="form-label">Answer {{ loop.index }}</label>
+                {{ answer.text(class="form-control", placeholder="Enter answer text") }}
+                <div class="form-check">
+                    {{ answer.is_correct(class="form-check-input") }}
+                    <label class="form-check-label">Correct Answer</label>
+                </div>
+                {% for error in answer.text.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">Add Question</button>
+        <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
