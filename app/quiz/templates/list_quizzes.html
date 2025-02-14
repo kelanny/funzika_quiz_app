@@ -45,7 +45,7 @@
                     <a href="#" class="btn btn-warning btn-sm">Edit</a>
 
                     <a href="{{ url_for('quiz.delete_quiz', quiz_id=quiz.id) }}" >Delete</a>
-                    <a href="{{ url_for('quiz.add_question', quiz_id=quiz.id) }}" >Add Question</a>
+                    <a href="{{ url_for('questions.add_question', quiz_id=quiz.id) }}" >Add Question</a>
                     
                     <!-- Delete Button Triggering Modal -->
                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ quiz.id }}">Delete</button> -->
