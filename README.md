@@ -55,7 +55,7 @@ A dynamic and user-friendly web application designed for creating, taking, and m
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/funzika-quiz-app.git
+   git clone https://github.com/kelanny/funzika-quiz-app.git
    cd funzika-quiz-app
    ```
 
